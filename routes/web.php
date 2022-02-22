@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Models\user;
+use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,8 +21,8 @@ Route::get('/', function () {
 
 // need auth first
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    $users = User::all();
-    return view('dashboard',compact('users'));
+    $tasks = DB::table('tasks')-> get();
+    return view('dashboard',compact('tasks'));
 })->name('dashboard');
 
 
