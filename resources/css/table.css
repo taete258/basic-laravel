@@ -94,11 +94,3 @@
     background-color: #49b933 !important;
     /*bg-indigo-500*/
   }
-
-  table.dataTable thead .sorting_asc_di_disabled {
-    background-image: url("../img/arrow-up.png") !important;
-  }
-  
-  table.dataTable thead .sorting_desc_disabled {
-    background-image: url("../img/arrow-down.png") !important;
-  }

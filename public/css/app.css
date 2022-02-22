@@ -960,6 +960,9 @@ select {
 .prose > :where(:last-child):not(:where([class~="not-prose"] *)) {
   margin-bottom: 0;
 }
+.invisible {
+  visibility: hidden;
+}
 .fixed {
   position: fixed;
 }
@@ -984,6 +987,9 @@ select {
 .top-0 {
   top: 0px;
 }
+.top-1\/2 {
+  top: 50%;
+}
 .z-0 {
   z-index: 0;
 }
@@ -999,6 +1005,10 @@ select {
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+.my-0 {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 .ml-3 {
   margin-left: 0.75rem;
@@ -1123,6 +1133,12 @@ select {
 .h-20 {
   height: 5rem;
 }
+.h-full {
+  height: 100%;
+}
+.h-0 {
+  height: 0px;
+}
 .min-h-screen {
   min-height: 100vh;
 }
@@ -1182,6 +1198,9 @@ select {
 }
 .max-w-6xl {
   max-width: 72rem;
+}
+.max-w-full {
+  max-width: 100%;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -1436,10 +1455,6 @@ select {
 .bg-gray-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
-}
-.bg-indigo-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(199 210 254 / var(--tw-bg-opacity));
 }
 .bg-green-600 {
   --tw-bg-opacity: 1;
@@ -1886,12 +1901,6 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before,
     background-color: #49b933 !important;
     /*bg-indigo-500*/
   }
-table.dataTable thead .sorting_asc_di_disabled {
-    background-image: url(/images/arrow-up.png?05c29a26cf79b8c788f6ab567bc44a84) !important;
-  }
-table.dataTable thead .sorting_desc_disabled {
-    background-image: url(/images/arrow-down.png?05c29a26cf79b8c788f6ab567bc44a84) !important;
-  }
 .hover\:border-gray-300:hover {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -1923,6 +1932,10 @@ table.dataTable thead .sorting_desc_disabled {
 .hover\:bg-indigo-500:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(99 102 241 / var(--tw-bg-opacity));
+}
+.hover\:bg-red-400:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }
 .hover\:text-gray-500:hover {
   --tw-text-opacity: 1;
@@ -2058,6 +2071,10 @@ table.dataTable thead .sorting_desc_disabled {
 .active\:bg-indigo-400:active {
   --tw-bg-opacity: 1;
   background-color: rgb(129 140 248 / var(--tw-bg-opacity));
+}
+.active\:bg-red-400:active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }
 .active\:text-gray-700:active {
   --tw-text-opacity: 1;

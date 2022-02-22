@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\DashboardController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,10 +20,9 @@ Route::get('/', function () {
 
 
 // need auth first
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    $tasks = DB::table('tasks')-> get();
-    return view('dashboard',compact('tasks'));
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/task-delete/{id}', [DashboardController::class,'deleteTaskById'])->name('task-delete');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {
