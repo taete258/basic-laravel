@@ -44,15 +44,13 @@
                   </x-jet-button>
             
 
-                  <form method="post" action="{{route('task-delete',$row->id)}}">
-                    @csrf
-                    <x-jet-button class="bg-red-600 hover:bg-red-400 active:bg-red-400">     
+                
+                  <x-jet-button class="bg-red-600 hover:bg-red-400 active:bg-red-400 confirm-delete" data-name="{{$row->name}}" data-id="{{$row->id}}">     
                       <i class="fa-solid fa-trash-can"></i>
-                    </x-jet-button>
-                </form>
-                 
-          
-                  
+                  </x-jet-button>
+              
+              
+            
                 </td>
               </tr>
               @endforeach
@@ -66,14 +64,80 @@
 </x-app-layout>
 
 <script>
-  $(document).ready(function () {
+    $(document).ready(function () {
+
       $('#dataTable').dataTable( {
         "initComplete": function(settings, json) {
           $('#table-content').removeClass('invisible');
           $('#loading-screen').addClass('invisible');
         }
-      } );
+      });
+
+
+      
   });
+
+
+  $('.confirm-delete').click(function(event) {
+          var form =  $(this).closest("form");
+          var name = $(this).data("name");
+          var id = $(this).data("id");
+
+          event.preventDefault();
+          swal({
+              title: 'Are you sure?',
+              text: `You won't be able to revert task ${name} !`,
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              $.ajax({
+                type: "POST",
+                url: `{{url('/task-delete/${id}')}}`,
+                cache: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    swal(
+                    "Sccess!",
+                    "Your task has been deleted!",
+                    "success"
+                    )
+                },
+                error: function (response) {
+                    swal(
+                    "Internal Error",
+                    "Oops, your task was not deleted!.", // had a missing comma
+                    "error"
+                    )
+                }
+            });
+            }
+
+           
+            // $.ajax({
+            //       type: "POST",
+            //       url: `{{url('/task-delete/${id}')}}`,
+            //       success: function (data) {
+            //         Swal.fire(
+            //           'Deleted!',
+            //           'Your task has been deleted.',
+            //           'success'
+            //         )
+            //       },error: function(data){
+                    
+            //       }        
+            //   });
+
+          });
+      });
+
+
+      
 
   
 </script>
