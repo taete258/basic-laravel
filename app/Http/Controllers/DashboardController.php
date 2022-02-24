@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\TaskController;
 
 
 class DashboardController extends Controller
@@ -20,17 +21,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $tasks = $this ->getTasksData();
+        $tasks = (new TaskController)-> getTasksData();
         return view('dashboard',compact('tasks'));
     }
-
-    private function getTasksData(){
-        return DB::table('tasks')-> get();
-    }
-
-    public function deleteTaskById($id){
-      return DB::table('tasks')->where('id', $id)->delete();
-    }
-
-
 }
+

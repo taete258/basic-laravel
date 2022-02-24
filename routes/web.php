@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,7 @@ Route::get('/', function () {
 // need auth first
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->post('/task-delete/{id}', [DashboardController::class,'deleteTaskById'])->name('task-delete');
+Route::middleware(['auth:sanctum', 'verified'])->post('/task-delete/{id}', [TaskController::class,'deleteTaskById'])->name('task-delete');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {
