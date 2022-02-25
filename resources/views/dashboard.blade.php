@@ -8,11 +8,10 @@
     <x-jet-loading-screen id="loading-screen"></x-jet-loading-screen>
 
     <div class="grid justify-items-end pt-4 px-6">
-        <x-jet-button class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400">
+        <x-jet-button class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400" onclick="openModalCreateTask()">
             <i class="fa-solid fa-plus mr-2"></i> Create Task
-          </x-jet-button>
-      </div>
-    
+        </x-jet-button>
+    </div>
 
     <div class="py-4 px-6 invisible" id="table-content">
         <div class="w-full">
@@ -30,7 +29,7 @@
                     <tbody class="bg-white divide-y divide-gray-200 table-auto">
                         @php($i = 1)
                         @foreach ($tasks as $row)
-                            <tr>
+                            <tr class="h-[55px]">
                                 <td class="px-6 py-4 text-left ">
                                     <div class="text-sm font-medium text-gray-900">{{ $i++ }}</div>
                                 </td>
@@ -64,43 +63,38 @@
         </div>
     </div>
 
-    <x-jet-custome-modal>
-        <form id="create-task-form">
+    <form id="create-task-form">
+        <x-jet-custome-modal id="create-task-modal">
             <x-slot name="title">
                 {{ __('Create Task') }}
             </x-slot>
-    
             <x-slot name="content">
                 <div>
                     <x-jet-label for="taskName" value="{{ __('Task Name') }}" />
-                    <x-jet-input id="taskName" type="text" class="mt-1 block w-full" required autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                    <x-jet-input-error for="taskName" class="mt-2" />
+                    <x-jet-input id="taskName" type="text" class="mt-1 block w-full"  autofocus
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    <span class="text-red-500 mt-2" id="taskNameError"></span>
                 </div>
                 <div class="mt-3">
                     <x-jet-label for="description" value="{{ __('Description') }}" />
-                    <x-jet-textarea id="description" type="text" class="mt-1 block w-full h-[70px]" required autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                    <x-jet-input-error for="description" class="mt-2" />
-                </div>
+                    <x-jet-textarea id="description" type="text" class="mt-1 block w-full h-[70px]"  autofocus
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    <span class="text-red-500 mt-2" id="descriptionError"></span>
 
-                <div class="mt-3">
-                    <x-jet-label for="description" value="{{ __('Description') }}" />
-                    <x-jet-textarea id="description" type="text" class="mt-1 block w-full h-[70px]" required autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                    <x-jet-input-error for="description" class="mt-2" />
                 </div>
-
             </x-slot>
-    
+
             <x-slot name="footer">
-                <x-jet-button >
+                <x-jet-button>
                     {{ __('Create') }}
                 </x-jet-button>
-                <x-jet-secondary-button >
+                <x-jet-secondary-button id="close-create-task" onclick="closeModalCreateTask()">
                     {{ __('Close') }}
                 </x-jet-secondary-button>
             </x-slot>
-        </form>
-       
-    </x-jet-custome-modal>
+        </x-jet-custome-modal>
+    </form>
+
 
 </x-app-layout>
 
@@ -133,7 +127,7 @@
                 if (willDelete) {
                     $.ajax({
                         type: "POST",
-                        url: `{{ url('/task-delete/${id}') }}`,
+                        url: `{{ url('/task/delete/${id}') }}`,
                         cache: false,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -155,5 +149,50 @@
                     });
                 }
             });
+    });
+
+    // open create task modal
+    function openModalCreateTask() {
+        $('#modal-box').removeClass('hidden');
+    }
+
+    // close create task modal
+    function closeModalCreateTask() {
+        $('#create-task-form').trigger('reset');
+        $('#modal-box').addClass('hidden');
+    }
+
+
+
+
+
+    $('#create-task-form').on('submit', function(e) {
+        e.preventDefault();
+
+        let formData = {
+            name: $("#taskName").val(),
+            description: $("#description").val(),
+        };
+
+        $.ajax({
+            url: "/task/add",
+            type: "POST",
+            cache: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
+            success: function(response) {
+                swal(
+                    "Sccess!",
+                    "Your task has been created!",
+                    "success"
+                )
+            },
+            error: function(response) {
+                 $('#taskNameError').text(response.responseJSON.errors.name);
+                 $('#descriptionError').text(response.responseJSON.errors.description);
+            },
+        });
     });
 </script>
