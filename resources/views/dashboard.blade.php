@@ -7,16 +7,16 @@
 
     <x-jet-loading-screen id="loading-screen"></x-jet-loading-screen>
 
+    <div class="grid justify-items-end pt-4 px-6">
+        <x-jet-button class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400">
+            <i class="fa-solid fa-plus mr-2"></i> Create Task
+          </x-jet-button>
+      </div>
     
-    <div class="py-12 px-6 invisible" id="table-content">
-        
+
+    <div class="py-4 px-6 invisible" id="table-content">
         <div class="w-full">
             <div class="shadow-md overflow-auto border-1 border-gray-200 rounded-lg bg-white">
-              <div class="float-right mt-5 mr-5">
-                <x-jet-button class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400">
-                  <i class="fa-solid fa-plus mr-2"></i> Add Task
-                </x-jet-button>
-              </div>
                 <table class="w-full text-sm divide-gray-200" id="dataTable">
                     <thead>
                         <tr>
@@ -63,6 +63,44 @@
             </div>
         </div>
     </div>
+
+    <x-jet-custome-modal>
+        <form id="create-task-form">
+            <x-slot name="title">
+                {{ __('Create Task') }}
+            </x-slot>
+    
+            <x-slot name="content">
+                <div>
+                    <x-jet-label for="taskName" value="{{ __('Task Name') }}" />
+                    <x-jet-input id="taskName" type="text" class="mt-1 block w-full" required autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    <x-jet-input-error for="taskName" class="mt-2" />
+                </div>
+                <div class="mt-3">
+                    <x-jet-label for="description" value="{{ __('Description') }}" />
+                    <x-jet-textarea id="description" type="text" class="mt-1 block w-full h-[70px]" required autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    <x-jet-input-error for="description" class="mt-2" />
+                </div>
+
+                <div class="mt-3">
+                    <x-jet-label for="description" value="{{ __('Description') }}" />
+                    <x-jet-textarea id="description" type="text" class="mt-1 block w-full h-[70px]" required autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    <x-jet-input-error for="description" class="mt-2" />
+                </div>
+
+            </x-slot>
+    
+            <x-slot name="footer">
+                <x-jet-button >
+                    {{ __('Create') }}
+                </x-jet-button>
+                <x-jet-secondary-button >
+                    {{ __('Close') }}
+                </x-jet-secondary-button>
+            </x-slot>
+        </form>
+       
+    </x-jet-custome-modal>
 
 </x-app-layout>
 

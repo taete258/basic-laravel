@@ -17,6 +17,8 @@ class JetstreamServiceProvider extends ServiceProvider
     {
         $this->registerComponent('badge');
         $this->registerComponent('loading-screen');
+        $this->registerComponent('custome-modal');
+        $this->registerComponent('textarea');
     }
 
     /**
