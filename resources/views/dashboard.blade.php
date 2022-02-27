@@ -16,7 +16,7 @@
     <div class="py-4 px-6 invisible" id="table-content">
         <div class="w-full">
             <div class="shadow-md overflow-auto border-1 border-gray-200 rounded-lg bg-white">
-                <table class="w-full text-sm divide-gray-200" id="dataTable">
+                <table class="w-full text-sm divide-gray-200" id="dataTable"  style="width: 100%;">
                     <thead>
                         <tr>
                             <th class="px-6 py-2 text-left text-md font-large text-indigo-700 ">No.</th>
@@ -27,36 +27,6 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200 table-auto">
-                        @php($i = 1)
-                        @foreach ($tasks as $row)
-                            <tr class="h-[55px]">
-                                <td class="px-6 py-4 text-left ">
-                                    <div class="text-sm font-medium text-gray-900">{{ $i++ }}</div>
-                                </td>
-                                <td class="px-6 py-4 text-left ">
-                                    <div class="text-sm font-medium text-gray-900">{{ $row->name }}</div>
-                                </td>
-                                <td class="px-6 py-4 text-left ">
-                                    <div class="text-sm text-gray-900">{{ $row->description ?? '-' }}</div>
-                                </td>
-                                <td class="px-6 py-4 text-left ">
-                                    <x-jet-badge
-                                        class="{{ $row->state == 'Archived' ? 'bg-green-600' : 'bg-red-600' }}  text-white">
-                                        {{ $row->state }}</x-jet-badge>
-                                </td>
-                                <td class="px-6 py-4 text-left flex">
-                                    <x-jet-button class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400">
-                                        <i class="fa-solid fa-list-check"></i>
-                                    </x-jet-button>
-
-                                    <x-jet-button class="bg-red-600 hover:bg-red-400 active:bg-red-400 confirm-delete"
-                                        data-name="{{ $row->name }}" data-id="{{ $row->id }}">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                    </x-jet-button>
-                                </td>
-                            </tr>
-                        @endforeach
-
                     </tbody>
                 </table>
             </div>
@@ -71,13 +41,13 @@
             <x-slot name="content">
                 <div>
                     <x-jet-label for="taskName" value="{{ __('Task Name') }}" />
-                    <x-jet-input id="taskName" type="text" class="mt-1 block w-full"  autofocus
-                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    <x-jet-input id="taskName" type="text" class="mt-1 block w-full" autofocus autocomplete="off"
+                        autocorrect="off" autocapitalize="off" spellcheck="false" />
                     <span class="text-red-500 mt-2" id="taskNameError"></span>
                 </div>
                 <div class="mt-3">
                     <x-jet-label for="description" value="{{ __('Description') }}" />
-                    <x-jet-textarea id="description" type="text" class="mt-1 block w-full h-[70px]"  autofocus
+                    <x-jet-textarea id="description" type="text" class="mt-1 block w-full h-[70px]" autofocus
                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
                     <span class="text-red-500 mt-2" id="descriptionError"></span>
 
@@ -85,7 +55,7 @@
             </x-slot>
 
             <x-slot name="footer">
-                <x-jet-button>
+                <x-jet-button onclick="createTask(event)">
                     {{ __('Create') }}
                 </x-jet-button>
                 <x-jet-secondary-button id="close-create-task" onclick="closeModalCreateTask()">
@@ -94,27 +64,92 @@
             </x-slot>
         </x-jet-custome-modal>
     </form>
-
-
+    <div id="rslt">
+    </div>
 </x-app-layout>
+
 
 <script>
     $(document).ready(function() {
-        $('#dataTable').dataTable({
+        var table = getDataTableTask();
+        $('#dataTable tbody').on( 'click', '.confirm-delete', function (e) {
+            var data = $('#dataTable').DataTable().row( $(this).parents('tr') ).data();
+            deleteTaskById(e,data)
+        });
+    });  
+</script>
+
+<script>
+    function getDataTableTask(){
+       return $('#dataTable').dataTable({
             "initComplete": function(settings, json) {
                 $('#table-content').removeClass('invisible');
                 $('#loading-screen').addClass('invisible');
-            }
+            },
+            ajax: `{{ url('/task/') }}`,
+            columns: [
+                { data: "No.",
+                    render: function(data,type, rowData, meta){
+                        return (meta.row + 1);
+                    }
+                },
+                { data: "name" },
+                { data: "description" ,
+                    render: function(data,type, rowData, meta){
+                        return (rowData.description ?? '-');
+                    }
+                },
+                { data: "state",
+                    render: function(data,type, rowData, meta){
+                        return  '<span class="' + (rowData.state == 'Archived' ? 'bg-green-600' : 'bg-red-600')+  ' text-white text-md inline-flex items-center justify-center px-3 py-1 leading-none rounded-full">'+ rowData.state +'</span>';
+                    }
+                },
+                { data: "Proceed",
+                    render: function(data,type, rowData, meta){
+                        let button1 = '<button type="button" class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400 inline-flex items-center px-4 py-2 bg-indigo-600 border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-400 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition"><i class="fa-solid fa-list-check"></i></button>';
+                        let button2 = '<button type="button" data-name="'+rowData.name+'" data-id="'+rowData.id+'" class="bg-red-600 hover:bg-red-400 active:bg-red-400 confirm-delete inline-flex items-center px-4 py-2 bg-indigo-600 border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-400 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition"> <i class="fa-solid fa-trash-can"></i></button>';
+                        return button1+button2;
+                    }
+                }
+            ],
         });
-    });
+    }
 
+    function createTask(e) {
+        e.preventDefault();
+        let formData = {
+            name: $("#taskName").val(),
+            description: $("#description").val(),
+        };
 
-    $('.confirm-delete').click(function(event) {
-        var form = $(this).closest("form");
-        var name = $(this).data("name");
-        var id = $(this).data("id");
+        $.ajax({
+            url: "/task/add",
+            type: "POST",
+            cache: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
+            success: function(response) {
+                swal(
+                    "Sccess!",
+                    "Your task has been created!",
+                    "success"
+                )
+                closeModalCreateTask();
+                $('#dataTable').DataTable().ajax.reload(null, false);
+            },
+            error: function(response) {
+                $('#taskNameError').text(response.responseJSON.errors.name);
+                $('#descriptionError').text(response.responseJSON.errors.description);
+            },
+        });
+    };
 
-        event.preventDefault();
+    function deleteTaskById(e,data) {
+        var name = data.name;
+        var id = data.id;
+        e.preventDefault();
         swal({
                 title: 'Are you sure?',
                 text: `You won't be able to revert task ${name} !`,
@@ -138,18 +173,19 @@
                                 "Your task has been deleted!",
                                 "success"
                             )
+                            $('#dataTable').DataTable().ajax.reload(null, false);
                         },
                         error: function(response) {
                             swal(
                                 "Internal Error",
-                                "Oops, your task was not deleted!.", // had a missing comma
+                                "Oops, your task was not deleted!.",
                                 "error"
                             )
                         }
                     });
                 }
             });
-    });
+    };
 
     // open create task modal
     function openModalCreateTask() {
@@ -161,38 +197,4 @@
         $('#create-task-form').trigger('reset');
         $('#modal-box').addClass('hidden');
     }
-
-
-
-
-
-    $('#create-task-form').on('submit', function(e) {
-        e.preventDefault();
-
-        let formData = {
-            name: $("#taskName").val(),
-            description: $("#description").val(),
-        };
-
-        $.ajax({
-            url: "/task/add",
-            type: "POST",
-            cache: false,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: formData,
-            success: function(response) {
-                swal(
-                    "Sccess!",
-                    "Your task has been created!",
-                    "success"
-                )
-            },
-            error: function(response) {
-                 $('#taskNameError').text(response.responseJSON.errors.name);
-                 $('#descriptionError').text(response.responseJSON.errors.description);
-            },
-        });
-    });
 </script>

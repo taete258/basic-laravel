@@ -12,7 +12,13 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
     public function getTasksData(){
-        return DB::table('tasks')-> get();
+        try{
+            $data = DB::table('tasks')->where('user_id',Auth::user()->id)->get();
+            return response()->json(['message' => 'Success!','data'=>$data ,'status'=>200], 200);
+        }
+        catch(QueryException $e){
+            return response()->json($e->getMessage(), 500);
+        }
     }
 
     public function deleteTaskById(Request $request){
@@ -26,18 +32,15 @@ class TaskController extends Controller
     }
 
     public function createTask(Request $request){
-        // $request->all();
-    
-
 
         try{
             $data = array();
             $data["user_id"] =  Auth::user()->id;
             $data["name"] =  $request->name;
             $data["description"] =  $request->description;
+            $data["state"] =  'Current';
 
             // not yet
-            $data["state"] =  'Archived';
             $data["step_id"] =  1;
             $data["order_in_steplist"] =  1;
 

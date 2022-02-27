@@ -21,8 +21,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $tasks = (new TaskController)-> getTasksData();
-        return view('dashboard',compact('tasks'));
+        return view('dashboard');
     }
 }
 

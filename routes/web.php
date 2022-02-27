@@ -23,6 +23,8 @@ Route::get('/', function () {
 // need auth first
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/task', [TaskController::class,'getTasksData'])->name('get-task');
+
 Route::middleware(['auth:sanctum', 'verified'])->post('/task/delete/{id}', [TaskController::class,'deleteTaskById'])->name('task-delete');
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/task/add', [TaskController::class,'createTask'])->name('task-add');
