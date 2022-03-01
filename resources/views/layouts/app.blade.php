@@ -20,12 +20,13 @@
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"  ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/3.2.1/jquery.serializejson.min.js" integrity="sha512-SdWDXwOhhVS/wWMRlwz3wZu3O5e4lm2/vKK3oD0E5slvGFg/swCYyZmts7+6si8WeJYIUsTrT3KZWWCknSopjg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"  ></script>
 	    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"  ></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"  ></script>
         
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased scrollbar-thin scrollbar-thumb-gray-200">
         <x-jet-banner />
 
         <div class="min-h-screen bg-gray-100">
@@ -51,3 +52,21 @@
         @livewireScripts
     </body>
 </html>
+<style>
+    #journal-scroll::-webkit-scrollbar {
+              width: 4px;
+              cursor: pointer;
+              /*background-color: rgba(229, 231, 235, var(--bg-opacity));*/
+  
+          }
+          #journal-scroll::-webkit-scrollbar-track {
+              background-color: rgba(229, 231, 235, var(--bg-opacity));
+              cursor: pointer;
+              /*background: red;*/
+          }
+          #journal-scroll::-webkit-scrollbar-thumb {
+              cursor: pointer;
+              background-color: #a0aec0;
+              /*outline: 1px solid slategrey;*/
+          }
+  </style>

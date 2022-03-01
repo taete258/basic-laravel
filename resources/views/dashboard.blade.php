@@ -1,3 +1,12 @@
+<style>
+
+    .taskName:only-of-type .delete{
+        display:none;
+    }
+    .taskName:last-of-type:not(:only-of-type){
+        display:flex;
+    }
+</style>
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -41,17 +50,28 @@
             <x-slot name="content">
                 <div>
                     <x-jet-label for="toDoName" value="{{ __('To do Name') }}" />
-                    <x-jet-input id="toDoName" type="text" class="mt-1 block w-full" autofocus autocomplete="off"
+                    <x-jet-input id="toDoName" name="name" type="text" class="mt-1 block w-full" autofocus autocomplete="off"
                         autocorrect="off" autocapitalize="off" spellcheck="false" />
                     <span class="text-red-500 mt-2" id="toDoNameError"></span>
                 </div>
                 <div class="mt-3">
                     <x-jet-label for="description" value="{{ __('Description') }}" />
-                    <x-jet-textarea id="description" type="text" class="mt-1 block w-full h-[70px]" autofocus
+                    <x-jet-textarea id="description" name="description" type="text" class="mt-1 block w-full h-[70px]" autofocus
                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
                     <span class="text-red-500 mt-2" id="descriptionError"></span>
-
                 </div>
+
+                <div class="mt-3 task-input-group">
+                    <x-jet-label for="tasks" id="task-label" value="{{__('Tasks')}}" ></x-jet-label>
+                      <a href="#" class="float-right add_form_field text-gray-700 text-sm hover:text-indigo-500" type="button" onclick="addMoreTask(event)">Add New Field &nbsp; 
+                        <i class="fa-solid fa-plus"></i>
+                      </a>
+                      {{-- <div class="taskName flex mt-1 mb-2 w-full">
+                        <x-jet-input  type="text" name="tasksData[0]" class="block w-full" />
+                        <x-jet-danger-button class="ml-2 mt-1 delete">
+                            <i class="fa-solid fa-x"></i>
+                        </x-jet-danger-button>
+                      </div> --}}
             </x-slot>
 
             <x-slot name="footer">
@@ -64,8 +84,6 @@
             </x-slot>
         </x-jet-custome-modal>
     </form>
-    <div id="rslt">
-    </div>
 </x-app-layout>
 
 
@@ -80,6 +98,10 @@
 </script>
 
 <script>
+
+var max_fields = 10;
+var x = 0;
+
     function getDataTableToDo(){
        return $('#dataTable').dataTable({
             "initComplete": function(settings, json) {
@@ -117,11 +139,7 @@
 
     function createToDo(e) {
         e.preventDefault();
-        let formData = {
-            name: $("#toDoName").val(),
-            description: $("#description").val(),
-        };
-
+        let formData = $('#create-todo-form').serializeJSON(); 
         $.ajax({
             url: "/todo/add",
             type: "POST",
@@ -187,14 +205,53 @@
             });
     };
 
-    // open create to do modal
     function openModalCreateToDo() {
         $('#modal-box').removeClass('hidden');
+        addMoreTask();
     }
 
-    // close create to do modal
     function closeModalCreateToDo() {
         $('#create-todo-form').trigger('reset');
         $('#modal-box').addClass('hidden');
+        removeAllTasks();
+    }
+
+    function addMoreTask(){
+        var wrapper = $(".task-input-group");
+            if (x < max_fields) {
+                x++;
+                let temp = `
+                <div class="taskName flex mt-2 mb-2 w-full">
+                    <div class="w-11/12">
+                        <label class="text-sm text-gray-500 w-full">Task</label>
+                        <x-jet-input  type="text" name="tasksData[${x}]" class="block w-full mb-2" /> 
+                        <label class="text-sm text-gray-500 w-full">Description</label>
+                        <x-jet-textarea id="taskDescription" name="taskDescription[${x}]" type="text" class="mt-1 block w-full h-[70px]" autofocus
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    </div>
+                    <div class="w-1/12 mt-6 text-center">
+                        <x-jet-danger-button class="h-full delete">
+                            <i class="fa-solid fa-x"></i>
+                        </x-jet-danger-button>  
+                    </div>
+                </div>`;
+                $(wrapper).append(temp);
+            } else {
+                alert('You Reached the task limits')
+            }
+
+
+        $(wrapper).on("click", ".delete", function() {
+            $(this).closest(".taskName").remove();
+            x--;
+            return false;
+        })
+        return false;
+    }
+
+    function removeAllTasks(){
+        $(".taskName").remove();
     }
 </script>
+
+

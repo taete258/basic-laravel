@@ -39,14 +39,6 @@ class ToDoController extends Controller
             $data["name"] =  $request->name;
             $data["description"] =  $request->description;
             $data["state"] =  'Current';
-
-            // not yet
-            // $data["step_id"] =  1;
-            // $data["order_in_steplist"] =  1;
-
-
-
-            
             $request->validate([
                 'name' => 'required| unique:todolists',
                 'description' => 'required'
@@ -55,8 +47,27 @@ class ToDoController extends Controller
                 'name.required' => 'ToDo name field is required.',
                 'description.required' => 'Description field is required.'
             ]);
-            DB::table('todolists')->insert($data);
-            return response()->json(['message' => 'Success!','data'=>$request,'status'=>200], 200);
+
+            $todoId = DB::table('todolists')->insertGetId($data);
+
+            $dataTask = array();
+            foreach ($request->tasksData as $key => $task) {
+                $dataTask[] = [
+                    'name' => $task->name,
+                    'todolist_id'=> $todoId ,
+                    'state'=> 'Current',
+                    'description' => ($task->description ?? null),
+                    'seq' => $key,
+                ];
+            }
+            for($i = 0; $i < count($request->tasksData);$i++){
+                
+            }
+        
+
+
+           
+            return response()->json(['message' => 'Success!','data'=>$dataTask,'status'=>200], 200);
         }
         catch(QueryException $e){
             return response()->json($e->getMessage(), 500);

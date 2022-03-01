@@ -2,21 +2,22 @@
 <!-- Modal  -->
 
 <span class="z-auto">
-    <div class="w-full h-full hidden" id="modal-box">
-      <div class="w-full h-full bg-slate-200 opacity-75 top-0 left-0 absolute"></div>
-      <div  class="sm:w-[385px] sm:min-w-[40vw] min-w-[80vw] flex flex-col items-center gap-2 -translate-y-1/2 px-8 py-6 bg-white rounded-lg top-1/2 left-1/2 -translate-x-1/2 absolute ">
+    <div class="hidden" id="modal-box">
+      <div class="fixed inset-0 bg-gray-600 bg-opacity-50 transition-opacity" aria-hidden="true"></div>
+      <div  class="sm:w-[450px] sm:min-w-[50vw] min-w-[80vw] items-center gap-2 -translate-y-1/2 px-4 py-6 bg-white rounded-lg top-1/2 left-1/2 -translate-x-1/2 absolute ">
         <div class="w-full py-2">
-            <div class="text-lg">
+            <div class="text-lg px-2">
                 {{ $title }}
             </div>
-            <div class="mt-4" id="content">
+            <div class="mt-4 max-h-[600px] px-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200" id="content">
                 {{ $content }}
             </div>
         </div>
-    
-        <div class="w-full flex flex-row justify-between  py-4">
+        <div class="w-full flex flex-row justify-between bg-white pt-4 px-2">
             {{ $footer }}
         </div>
+       
       </div>
+     
     </div>
 </div>
