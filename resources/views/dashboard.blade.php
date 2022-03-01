@@ -8,8 +8,8 @@
     <x-jet-loading-screen id="loading-screen"></x-jet-loading-screen>
 
     <div class="grid justify-items-end pt-4 px-6">
-        <x-jet-button class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400" onclick="openModalCreateTask()">
-            <i class="fa-solid fa-plus mr-2"></i> Create Task
+        <x-jet-button class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400" onclick="openModalCreateToDo()">
+            <i class="fa-solid fa-plus mr-2"></i> Create ToDo
         </x-jet-button>
     </div>
 
@@ -20,7 +20,7 @@
                     <thead>
                         <tr>
                             <th class="px-6 py-2 text-left text-md font-large text-indigo-700 ">No.</th>
-                            <th class="px-6 py-2 text-left text-md font-large text-indigo-700 ">Task Name</th>
+                            <th class="px-6 py-2 text-left text-md font-large text-indigo-700 ">To do Name</th>
                             <th class="px-6 py-2 text-left text-md font-large text-indigo-700">Description</th>
                             <th class="px-6 py-2 text-left text-md font-large text-indigo-700">Status</th>
                             <th class="px-6 py-2 text-left text-md font-large text-indigo-700">Proceed</th>
@@ -33,17 +33,17 @@
         </div>
     </div>
 
-    <form id="create-task-form">
-        <x-jet-custome-modal id="create-task-modal">
+    <form id="create-todo-form">
+        <x-jet-custome-modal id="create-todo-modal">
             <x-slot name="title">
-                {{ __('Create Task') }}
+                {{ __('Create To do') }}
             </x-slot>
             <x-slot name="content">
                 <div>
-                    <x-jet-label for="taskName" value="{{ __('Task Name') }}" />
-                    <x-jet-input id="taskName" type="text" class="mt-1 block w-full" autofocus autocomplete="off"
+                    <x-jet-label for="toDoName" value="{{ __('To do Name') }}" />
+                    <x-jet-input id="toDoName" type="text" class="mt-1 block w-full" autofocus autocomplete="off"
                         autocorrect="off" autocapitalize="off" spellcheck="false" />
-                    <span class="text-red-500 mt-2" id="taskNameError"></span>
+                    <span class="text-red-500 mt-2" id="toDoNameError"></span>
                 </div>
                 <div class="mt-3">
                     <x-jet-label for="description" value="{{ __('Description') }}" />
@@ -55,10 +55,10 @@
             </x-slot>
 
             <x-slot name="footer">
-                <x-jet-button onclick="createTask(event)">
+                <x-jet-button onclick="createToDo(event)">
                     {{ __('Create') }}
                 </x-jet-button>
-                <x-jet-secondary-button id="close-create-task" onclick="closeModalCreateTask()">
+                <x-jet-secondary-button id="close-create-todo" onclick="closeModalCreateToDo()">
                     {{ __('Close') }}
                 </x-jet-secondary-button>
             </x-slot>
@@ -71,22 +71,22 @@
 
 <script>
     $(document).ready(function() {
-        var table = getDataTableTask();
+        var table = getDataTableToDo();
         $('#dataTable tbody').on( 'click', '.confirm-delete', function (e) {
             var data = $('#dataTable').DataTable().row( $(this).parents('tr') ).data();
-            deleteTaskById(e,data)
+            deleteToDoById(e,data)
         });
     });  
 </script>
 
 <script>
-    function getDataTableTask(){
+    function getDataTableToDo(){
        return $('#dataTable').dataTable({
             "initComplete": function(settings, json) {
                 $('#table-content').removeClass('invisible');
                 $('#loading-screen').addClass('invisible');
             },
-            ajax: `{{ url('/task/') }}`,
+            ajax: `{{ url('/todo/') }}`,
             columns: [
                 { data: "No.",
                     render: function(data,type, rowData, meta){
@@ -115,15 +115,15 @@
         });
     }
 
-    function createTask(e) {
+    function createToDo(e) {
         e.preventDefault();
         let formData = {
-            name: $("#taskName").val(),
+            name: $("#toDoName").val(),
             description: $("#description").val(),
         };
 
         $.ajax({
-            url: "/task/add",
+            url: "/todo/add",
             type: "POST",
             cache: false,
             headers: {
@@ -133,26 +133,26 @@
             success: function(response) {
                 swal(
                     "Sccess!",
-                    "Your task has been created!",
+                    "Your to do has been created!",
                     "success"
                 )
-                closeModalCreateTask();
+                closeModalCreateToDo();
                 $('#dataTable').DataTable().ajax.reload(null, false);
             },
             error: function(response) {
-                $('#taskNameError').text(response.responseJSON.errors.name);
+                $('#toDoNameError').text(response.responseJSON.errors.name);
                 $('#descriptionError').text(response.responseJSON.errors.description);
             },
         });
     };
 
-    function deleteTaskById(e,data) {
+    function deleteToDoById(e,data) {
         var name = data.name;
         var id = data.id;
         e.preventDefault();
         swal({
                 title: 'Are you sure?',
-                text: `You won't be able to revert task ${name} !`,
+                text: `You won't be able to revert to do "${name}"" !`,
                 icon: 'warning',
                 buttons: true,
                 dangerMode: true,
@@ -162,7 +162,7 @@
                 if (willDelete) {
                     $.ajax({
                         type: "POST",
-                        url: `{{ url('/task/delete/${id}') }}`,
+                        url: `{{ url('/todo/delete/${id}') }}`,
                         cache: false,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -170,7 +170,7 @@
                         success: function(response) {
                             swal(
                                 "Sccess!",
-                                "Your task has been deleted!",
+                                "Your to do has been deleted!",
                                 "success"
                             )
                             $('#dataTable').DataTable().ajax.reload(null, false);
@@ -178,7 +178,7 @@
                         error: function(response) {
                             swal(
                                 "Internal Error",
-                                "Oops, your task was not deleted!.",
+                                "Oops, your to do was not deleted!.",
                                 "error"
                             )
                         }
@@ -187,14 +187,14 @@
             });
     };
 
-    // open create task modal
-    function openModalCreateTask() {
+    // open create to do modal
+    function openModalCreateToDo() {
         $('#modal-box').removeClass('hidden');
     }
 
-    // close create task modal
-    function closeModalCreateTask() {
-        $('#create-task-form').trigger('reset');
+    // close create to do modal
+    function closeModalCreateToDo() {
+        $('#create-todo-form').trigger('reset');
         $('#modal-box').addClass('hidden');
     }
 </script>

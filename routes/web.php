@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ToDoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,11 +23,11 @@ Route::get('/', function () {
 // need auth first
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/task', [TaskController::class,'getTasksData'])->name('get-task');
+Route::middleware(['auth:sanctum', 'verified'])->get('/todo', [ToDoController::class,'getToDoData'])->name('get-todo');
 
-Route::middleware(['auth:sanctum', 'verified'])->post('/task/delete/{id}', [TaskController::class,'deleteTaskById'])->name('task-delete');
+Route::middleware(['auth:sanctum', 'verified'])->post('/todo/delete/{id}', [ToDoController::class,'deleteToDoById'])->name('todo-delete');
 
-Route::middleware(['auth:sanctum', 'verified'])->post('/task/add', [TaskController::class,'createTask'])->name('task-add');
+Route::middleware(['auth:sanctum', 'verified'])->post('/todo/add', [ToDoController::class,'createToDo'])->name('todo-add');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {
