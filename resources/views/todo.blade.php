@@ -10,7 +10,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('To Do') }}
         </h2>
     </x-slot>
 
@@ -66,12 +66,6 @@
                       <a href="#" class="float-right add_form_field text-gray-700 text-sm hover:text-indigo-500" type="button" onclick="addMoreTask(event)">Add New Field &nbsp; 
                         <i class="fa-solid fa-plus"></i>
                       </a>
-                      {{-- <div class="taskName flex mt-1 mb-2 w-full">
-                        <x-jet-input  type="text" name="tasksData[0]" class="block w-full" />
-                        <x-jet-danger-button class="ml-2 mt-1 delete">
-                            <i class="fa-solid fa-x"></i>
-                        </x-jet-danger-button>
-                      </div> --}}
             </x-slot>
 
             <x-slot name="footer">
@@ -139,7 +133,21 @@ var x = 0;
 
     function createToDo(e) {
         e.preventDefault();
-        let formData = $('#create-todo-form').serializeJSON(); 
+        var data = [];
+        $('.taskName input[name="tasksData"]').each(function() {
+                if($(this).val() != ''){
+                    data.push({
+                    name: $(this).val(),
+                    description: ($(this).nextAll('[name="tasksDescription"]').val() != '') ? $(this).nextAll('[name="tasksDescription"]').val(): null
+                });
+            }
+        });
+        let formData = {
+            name: $("#toDoName").val(),
+            description: $("#description").val(),
+            tasksData: data
+        };
+        
         $.ajax({
             url: "/todo/add",
             type: "POST",
@@ -224,9 +232,9 @@ var x = 0;
                 <div class="taskName flex mt-2 mb-2 w-full">
                     <div class="w-11/12">
                         <label class="text-sm text-gray-500 w-full">Task</label>
-                        <x-jet-input  type="text" name="tasksData[${x}]" class="block w-full mb-2" /> 
+                        <x-jet-input  type="text" name="tasksData" class="block w-full mb-2" /> 
                         <label class="text-sm text-gray-500 w-full">Description</label>
-                        <x-jet-textarea id="taskDescription" name="taskDescription[${x}]" type="text" class="mt-1 block w-full h-[70px]" autofocus
+                        <x-jet-textarea id="taskDescription" name="tasksDescription" type="text" class="mt-1 block w-full h-[70px]" autofocus
                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
                     </div>
                     <div class="w-1/12 mt-6 text-center">

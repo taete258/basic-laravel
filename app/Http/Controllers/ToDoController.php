@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
-
+use Debugbar;
 
 
 class ToDoController extends Controller
@@ -53,21 +53,15 @@ class ToDoController extends Controller
             $dataTask = array();
             foreach ($request->tasksData as $key => $task) {
                 $dataTask[] = [
-                    'name' => $task->name,
+                    'name' => $task['name'],
                     'todolist_id'=> $todoId ,
                     'state'=> 'Current',
-                    'description' => ($task->description ?? null),
-                    'seq' => $key,
+                    'description' => ($task['description'] ?? null),
+                    'seq' => $key+1,
                 ];
             }
-            for($i = 0; $i < count($request->tasksData);$i++){
-                
-            }
-        
-
-
-           
-            return response()->json(['message' => 'Success!','data'=>$dataTask,'status'=>200], 200);
+            DB::table('tasks')->insert($dataTask);
+            return response()->json(['message' => 'Success!','status'=>200], 200);
         }
         catch(QueryException $e){
             return response()->json($e->getMessage(), 500);
