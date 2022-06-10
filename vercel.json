@@ -1,6 +1,6 @@
 {
-    "version":0.1,
-    "fuctions":{
+    "version":2,
+    "functions":{
         "ap/index.php":{"runtime": "vercel-php@0.4.0"}
     },
     "routes":[{
