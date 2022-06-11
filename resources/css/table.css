@@ -1,0 +1,96 @@
+ /*Overrides for Tailwind CSS */
+
+ .dataTables_wrapper{
+   padding: 20px;
+ }
+
+  /*Form fields*/
+  .dataTables_wrapper select,
+  .dataTables_wrapper .dataTables_filter input {
+    color: #4a5568 !important;
+
+    padding-left: 20px !important;
+
+    padding-right: 20px !important;
+ 
+    padding-top: .5rem !important;
+
+    padding-bottom: .5rem !important;
+
+    line-height: 1.25 !important;
+
+    border-width: 2px !important;
+
+    border-radius: .25rem !important;
+
+    background-color: #edf2f7 !important;
+
+    margin-bottom: 10px;
+  }
+
+  .dataTables_wrapper select:focus,
+  .dataTables_wrapper .dataTables_filter input:focus{
+    box-shadow:none !important;
+  }
+
+  /*Row Hover*/
+  table.dataTable.hover tbody tr:hover,
+  table.dataTable.display tbody tr:hover {
+    background-color: #ebf4ff !important;
+  }
+
+  /*Pagination Buttons*/
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    font-weight: 700 !important;
+
+    border-radius: .25rem !important;
+  
+    border: 1px solid transparent !important;
+   
+  }
+
+  /*Pagination Buttons - Current selected */
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    color: #fff !important;
+
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
+
+    font-weight: 700 !important;
+
+    border-radius: .25rem !important;
+
+    background: #667eea !important;
+    
+    border: 1px solid transparent !important;
+
+  }
+
+  /*Pagination Buttons - Hover */
+  .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: #fff !important;
+   
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
+   
+    font-weight: 700!important;
+    
+    border-radius: .25rem !important;
+   
+    background: #667eea !important;
+   
+    border: 1px solid transparent !important;
+   
+  }
+
+  /*Add padding to bottom border */
+  table.dataTable.no-footer {
+    border-bottom: 1px solid #e2e8f0 !important;
+    margin-top: 0.75em !important;
+    margin-bottom: 0.75em !important;
+  }
+
+  /*Change colour of responsive icon*/
+  table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before,
+  table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
+    background-color: #49b933 !important;
+    /*bg-indigo-500*/
+  }

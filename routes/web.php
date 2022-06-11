@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Models\user;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ToDoController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,10 +21,13 @@ Route::get('/', function () {
 
 
 // need auth first
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    $users = User::all();
-    return view('dashboard',compact('users'));
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/todo', [ToDoController::class,'getToDoData'])->name('get-todo');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/todo/delete/{id}', [ToDoController::class,'deleteToDoById'])->name('todo-delete');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/todo/add', [ToDoController::class,'createToDo'])->name('todo-add');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {

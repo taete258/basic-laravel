@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Actions\Jetstream\DeleteUser;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
-
+use Illuminate\Support\Facades\Blade;
 class JetstreamServiceProvider extends ServiceProvider
 {
     /**
@@ -15,7 +15,10 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->registerComponent('badge');
+        $this->registerComponent('loading-screen');
+        $this->registerComponent('custome-modal');
+        $this->registerComponent('textarea');
     }
 
     /**
@@ -45,5 +48,10 @@ class JetstreamServiceProvider extends ServiceProvider
             'update',
             'delete',
         ]);
+    }
+
+    protected function registerComponent(string $component)
+    {
+        Blade::component('jetstream::components.'.$component, 'jet-'.$component);
     }
 }
