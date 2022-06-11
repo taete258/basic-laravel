@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('todolists', function (Blueprint $table) {
-            $table->id();
             $table->bigIncrements('user_id')->unique();
             $table->string('name',500);
             $table->string('description', 2048)->nullable();
