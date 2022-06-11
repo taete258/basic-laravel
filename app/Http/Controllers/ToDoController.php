@@ -23,7 +23,7 @@ class ToDoController extends Controller
 
     public function deleteToDoById(Request $request){
         try{
-            DB::table('todolists')->where('id',$request->id)->delete();
+            DB::table('todolists')->where('todolist_id',$request->id)->delete();
             return response()->json(['message' => 'Success!','status'=>200], 200);
         }
         catch(QueryException $e){

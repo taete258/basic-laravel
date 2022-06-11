@@ -85,7 +85,6 @@
 <script>
     $(document).ready(function() {
         var table = getDataTableToDo();
-        console.log(table)
         $('#dataTable tbody').on('click', '.confirm-delete', function(e) {
             var data = $('#dataTable').DataTable().row($(this).parents('tr')).data();
             deleteToDoById(e, data)
@@ -134,7 +133,7 @@
                         let button1 =
                             '<button type="button" class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-400 inline-flex items-center px-4 py-2 bg-indigo-600 border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-400 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition"><i class="fa-solid fa-list-check"></i></button>';
                         let button2 = '<button type="button" data-name="' + rowData.name +
-                            '" data-id="' + rowData.id +
+                            '" data-id="' + rowData.todolist_id +
                             '" class="bg-red-600 hover:bg-red-400 active:bg-red-400 confirm-delete inline-flex items-center px-4 py-2 bg-indigo-600 border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-400 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition"> <i class="fa-solid fa-trash-can"></i></button>';
                         return button1 + button2;
                     }
@@ -187,7 +186,7 @@
 
     function deleteToDoById(e, data) {
         var name = data.name;
-        var id = data.id;
+        var id = data.todolist_id;
         e.preventDefault();
         swal({
                 title: 'Are you sure?',
