@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('todolists', function (Blueprint $table) {
             $table->id();
-            $table->bigIncrements('user_id')->unique()->nullable();
-            $table->string('name',500)->nullable();
-            $table->string('description', 2048);
+            $table->bigIncrements('user_id')->unique();
+            $table->string('name',500);
+            $table->string('description', 2048)->nullable();
             $table->string('state', 20);
-            $table->foreignId('todolist_id')->nullable();
+            $table->foreignId('todolist_id');
      
         });
     }

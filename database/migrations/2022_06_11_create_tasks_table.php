@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name',500)->nullable();
-            $table->foreignId('todolist_id')->nullable();
+            $table->string('name',500);
+            $table->foreignId('todolist_id');
             $table->string('state', 20);
-            $table->string('description', 2048);
+            $table->string('description', 2048)->nullable();
             $table->integer('seq');
         });
     }
