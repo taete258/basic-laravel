@@ -14,12 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('todolists', function (Blueprint $table) {
-            $table->bigIncrements('user_id')->unique();
+            $table->bigIncrements('todolist_id');
+            $table->foreignId('user_id')->unique();
             $table->string('name',500);
             $table->string('description', 2048)->nullable();
             $table->string('state', 20);
-            $table->foreignId('todolist_id');
-     
         });
     }
 

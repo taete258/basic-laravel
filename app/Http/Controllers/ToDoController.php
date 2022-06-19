@@ -49,6 +49,7 @@ class ToDoController extends Controller
             ]);
 
             $todoId = DB::table('todolists')->insertGetId($data);
+            Debugbar::info($todoId);
 
             $dataTask = array();
             foreach ($request->tasksData as $key => $task) {
